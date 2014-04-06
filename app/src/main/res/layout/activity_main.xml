@@ -64,7 +64,18 @@
         android:layout_weight="1"
         android:paddingLeft="@dimen/page_margin"
         android:paddingRight="@dimen/page_margin"
-        android:scrollbarStyle="outsideOverlay" />
+        android:scrollbarStyle="outsideOverlay"/>
+
+    <!-- the android:id is important -->
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="@dimen/page_margin"
+        android:paddingRight="@dimen/page_margin"
+        android:textSize="30dp"
+        android:gravity="center"
+        android:text="No BookMarks created yet!"/>
 
     <!--
         When using the Holo theme (setting your activity or app theme to

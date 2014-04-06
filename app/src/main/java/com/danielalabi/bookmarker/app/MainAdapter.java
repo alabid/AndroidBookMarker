@@ -51,9 +51,6 @@ public class MainAdapter extends ArrayAdapter<String> {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(view.getContext(),
-                                "Item clicked for " +m.getItem(position),
-                                Toast.LENGTH_SHORT).show();
                         String[] info = m.getItem(position).split("\\|");
                         if (info.length == 2) {
                             ((MainActivity)m.c).openURI(view, info[1]);
@@ -68,9 +65,6 @@ public class MainAdapter extends ArrayAdapter<String> {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                Toast.makeText(view.getContext(),
-                                        "Item clicked for " + m.getItem(position),
-                                        Toast.LENGTH_SHORT).show();
                                 ((MainActivity) m.c).openBookMark(view, m.getItem(position));
                             }
                         });
@@ -82,9 +76,7 @@ public class MainAdapter extends ArrayAdapter<String> {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Toast.makeText(view.getContext(),
-                                    "Trash clicked for " + m.getItem(position),
-                                    Toast.LENGTH_SHORT).show();
+                            ((MainActivity)m.c).deleteDialog(m.getItem(position));
                         }
                     });
         }

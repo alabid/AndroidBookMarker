@@ -15,6 +15,8 @@ import android.widget.Toast;
 public class BookMarkEditingActivity extends Activity {
     String currentName;
     String currentURI;
+    public final static String BOOK_MARK_MESSAGE_OLD = "com.danielalabi.bookmark.BOOK_MARK_MESSAGE_OLD";
+    public final static String BOOK_MARK_MESSAGE_NEW = "com.danielalabi.bookmark.BOOK_MARK_MESSAGE_NEW";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,8 @@ public class BookMarkEditingActivity extends Activity {
         EditText t2 = (EditText) findViewById(R.id.editTextURI);
         t1.setText(currentName);
         if (current.length == 2) {
-            t2.setText(current[1]);
+            currentURI = current[1];
+            t2.setText(currentURI);
         }
     }
 
@@ -38,19 +41,25 @@ public class BookMarkEditingActivity extends Activity {
     /** Called when the user clicks the Send button */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void saveBookMark(View view) {
-        // save and update list of items here
-        /*
-        TextView textView = (TextView) findViewById(R.id.name_show);
-        EditText e = (EditText) findViewById(R.id.editTextName);
-        current = (String) e.getText().toString();
+        EditText e1 = (EditText) findViewById(R.id.editTextName);
+        String newName = (String) e1.getText().toString();
 
-        Toast.makeText(view.getContext(),
-                "Updated " + current,
-                Toast.LENGTH_SHORT).show();
-        */
-        // for now, just close
-        navigateUpTo(getParentActivityIntent());
-        // navigateUpFromSameTask(this);
+        EditText e2 = (EditText) findViewById(R.id.editTextURI);
+        String newURI = (String) e2.getText().toString();
+
+        if (newName.length() == 0 || newURI.length() == 0) {
+            Toast.makeText(getApplicationContext(),
+                    "BookMark name or URI cannot be empty.",
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = getParentActivityIntent();
+            intent.putExtra(BOOK_MARK_MESSAGE_OLD, currentName + "|" + currentURI);
+            if (!newURI.startsWith("http://") || newURI.startsWith("https://")) {
+                newURI = "http://" + newURI;
+            }
+            intent.putExtra(BOOK_MARK_MESSAGE_NEW, newName + "|" + newURI);
+            navigateUpTo(intent);
+        }
     }
 
     @Override
@@ -66,16 +75,7 @@ public class BookMarkEditingActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.edit) {
-            // set content view to everything editable
-            // also do this when
-            // Create the text view
-            setContentView(R.layout.activity_book_mark_editing);
-            EditText e = (EditText) findViewById(R.id.editTextName);
-            e.setTextSize(40);
-            e.setText(currentName);
-        }
+
         return super.onOptionsItemSelected(item);
     }
 
