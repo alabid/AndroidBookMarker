@@ -33,12 +33,6 @@
         android:onClick="saveBookMark"
         android:layout_marginBottom="60dp" />
 
-    <ImageButton android:id="@+id/edit"
-        android:layout_height="fill_parent"
-        android:layout_width="fill_parent"
-        android:title="@string/edit"
-        android:orderInCategory="100"
-        android:src="@android:drawable/ic_dialog_info" />
 
 
 </LinearLayout>

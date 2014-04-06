@@ -21,6 +21,7 @@ public class MainActivity extends ListActivity {
     public final static String BOOK_MARK_MESSAGE = "com.danielalabi.bookmark.BOOK_MARK_MESSAGE";
     MainAdapter adapter;
     ArrayList<String> listItems;
+    boolean doneEditing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +33,11 @@ public class MainActivity extends ListActivity {
         listItems.add("Facebook|http://facebook.com");
         listItems.add("alabidan|http://alabidan.me");
         listItems.add("nytimes|http://nytimes");
-        listItems.add("cnn|cnn.com");
-        listItems.add("fox news|foxnews.com");
-        listItems.add("huffington post|huffingtonpost.com");
-        listItems.add("aljazeera|aljazeera.com");
-        listItems.add("break.com|break.com");
+        listItems.add("cnn|http://cnn.com");
+        listItems.add("fox news|http://foxnews.com");
+        listItems.add("huffington post|http://huffingtonpost.com");
+        listItems.add("aljazeera|http://aljazeera.com");
+        listItems.add("break.com|http://break.com");
 
         adapter = new MainAdapter(this, R.layout.list_item, listItems);
         ListView listView = (ListView)this.findViewById(android.R.id.list);
@@ -52,6 +53,7 @@ public class MainActivity extends ListActivity {
                 ((MainActivity)c).openBookMark(view, "");
             }
         });
+        doneEditing = false;
     }
 
     public void openURI(View view, String url) {
@@ -88,13 +90,41 @@ public class MainActivity extends ListActivity {
             return true;
         }
         */
-        if (id == R.id.edit) {
-            setContentView(R.layout.activity_main);
+        invalidateOptionsMenu();
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        System.out.println("on prepare called!");
+        MenuItem mi = menu.getItem(0);
+        if(doneEditing){
+            mi.setTitle("done"); //.setIcon(android.R.drawable.ic_menu_dR.drawable.ic_content_remove);
+            mi.setIcon(android.R.drawable.ic_menu_upload);
+            /*MenuItem mi = menu.add("New Item");
+            mi.setIcon(R.drawable.ic_location_web_site);
+            canAddItem = false;
+            */
             adapter = new MainAdapter(this, R.layout.list_item_info, listItems);
             ListView listView = (ListView)this.findViewById(android.R.id.list);
             listView.setAdapter(adapter);
+            doneEditing = false;
         }
-        return super.onOptionsItemSelected(item);
+        else{
+            mi.setTitle("edit");
+            mi.setIcon(android.R.drawable.ic_menu_edit);
+            /*menu.getItem(0).setIcon(R.drawable.ic_content_new);
+            canAddItem = true;
+            */
+            adapter = new MainAdapter(this, R.layout.list_item, listItems);
+            ListView listView = (ListView)this.findViewById(android.R.id.list);
+            listView.setAdapter(adapter);
+            doneEditing = true;
+        }
+
+        mi.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        return super.onPrepareOptionsMenu(menu);
     }
 
 }

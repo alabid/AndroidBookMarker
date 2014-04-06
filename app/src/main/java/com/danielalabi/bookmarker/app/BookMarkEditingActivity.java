@@ -1,7 +1,9 @@
 package com.danielalabi.bookmarker.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,22 +22,21 @@ public class BookMarkEditingActivity extends Activity {
 
         // Get the message from the intent
         Intent intent = getIntent();
-        String[] current = intent.getStringExtra(MainActivity.BOOK_MARK_MESSAGE).split("|");
+        String[] current = intent.getStringExtra(MainActivity.BOOK_MARK_MESSAGE).split("\\|");
         currentName = current[0];
 
-        if (currentName.length() > 0) {
-            setContentView(R.layout.activity_book_mark_show);
-            // Create the text view
-            TextView textView = (TextView) findViewById(R.id.name_show);
-            textView.setText(currentName);
-        }
-        else {
-            setContentView(R.layout.activity_book_mark_editing);
+        setContentView(R.layout.activity_book_mark_editing);
+        EditText t1 = (EditText) findViewById(R.id.editTextName);
+        EditText t2 = (EditText) findViewById(R.id.editTextURI);
+        t1.setText(currentName);
+        if (current.length == 2) {
+            t2.setText(current[1]);
         }
     }
 
 
     /** Called when the user clicks the Send button */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void saveBookMark(View view) {
         // save and update list of items here
         /*
@@ -48,7 +49,8 @@ public class BookMarkEditingActivity extends Activity {
                 Toast.LENGTH_SHORT).show();
         */
         // for now, just close
-        finish();
+        navigateUpTo(getParentActivityIntent());
+        // navigateUpFromSameTask(this);
     }
 
     @Override
