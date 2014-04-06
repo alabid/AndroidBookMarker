@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,19 +20,25 @@ import java.util.ArrayList;
 
 public class MainAdapter extends ArrayAdapter<String> {
     Context c;
+    int resource;
     public MainAdapter(Context context, int resource, ArrayList<String> listItems) {
         super(context, resource, listItems);
         this.c = context;
+        this.resource = resource;
     }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.list_item, parent, false);
+            convertView = inflater.inflate(resource, parent, false);
         }
         if (convertView != null) {
-            TextView textView = (TextView) convertView.findViewById(R.id.text1);
-            textView.setText(this.getItem(position));
+            String item = this.getItem(position);
+            if (item.length() > 0) {
+                TextView textView = (TextView) convertView.findViewById(R.id.text1);
+                String[] kv = item.split("|");
+                textView.setText(kv[0]);
+            }
 
         }
         final MainAdapter m  = this;
@@ -44,19 +52,25 @@ public class MainAdapter extends ArrayAdapter<String> {
                         Toast.makeText(view.getContext(),
                                 "Item clicked for " +m.getItem(position),
                                 Toast.LENGTH_SHORT).show();
-                        ((MainActivity)m.c).openBookMark(view, m.getItem(position));
+                        String[] info = m.getItem(position).split("|");
+                        if (info.length == 2) {
+                            ((MainActivity)m.c).openURI(view, info[1]);
+                        }
                     }
                 });
 
-        convertView.findViewById(R.id.secondary_action).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(view.getContext(),
-                                "Trash clicked for " + m.getItem(position),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
+        ImageButton l = (ImageButton) convertView.findViewById(R.id.secondary_action);
+        if (l != null) {
+            l.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(view.getContext(),
+                                    "Trash clicked for " + m.getItem(position),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
         return convertView;
     }
 }

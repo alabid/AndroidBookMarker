@@ -1,11 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.danielalabi.bookmarker.app.BookMarkEditingActivity" >
-    
-    <item android:id="@+id/edit"
-        android:title="@string/edit"
-        android:orderInCategory="100"
-        android:icon="@android:drawable/ic_menu_edit"
-        android:showAsAction="ifRoom" />
+
 
 </menu>
