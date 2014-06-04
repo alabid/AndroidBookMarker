@@ -13,36 +13,37 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 
-public class MainAdapter extends ArrayAdapter<String> {
-    Context c;
+public class BookMarkListAdapter extends ArrayAdapter<String> {
+    Context context;
     int resource;
-    public MainAdapter(Context context, int resource, ArrayList<String> listItems) {
+
+    public BookMarkListAdapter(Context context, int resource, ArrayList<String> listItems) {
         super(context, resource, listItems);
-        this.c = context;
+        this.context = context;
         this.resource = resource;
     }
 
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
+
         if (convertView == null) {
+
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(resource, parent, false);
         }
-        if (convertView != null) {
-            String item = this.getItem(position);
-            if (item.length() > 0) {
-                TextView textView = (TextView) convertView.findViewById(R.id.text1);
-                String[] kv = item.split("\\|");
-                textView.setText(kv[0]);
-            }
 
-        }
-        final MainAdapter m  = this;
-        // Because the list item contains multiple touch targets, you should not override
+        String item = this.getItem(position);
+        final BookMark bookmark = BookMark.deserializeBookMark(item);
+        TextView textView = (TextView) convertView.findViewById(R.id.text1);
+        textView.setText(bookmark.getName());
+
+
+        final BookMarkListAdapter m  = this;
+
+        // Because each list item contains UI list item targets, you should not override
         // onListItemClick. Instead, set a click listener for each target individually.
 
         LinearLayout l1 = (LinearLayout) convertView.findViewById(R.id.primary_target);
@@ -51,10 +52,7 @@ public class MainAdapter extends ArrayAdapter<String> {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String[] info = m.getItem(position).split("\\|");
-                        if (info.length == 2) {
-                            ((MainActivity)m.c).openURI(view, info[1]);
-                        }
+                        ((BookMarkMainActivity) m.context).openURI(bookmark.getURI());
                     }
                 });
         }
@@ -65,7 +63,7 @@ public class MainAdapter extends ArrayAdapter<String> {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                ((MainActivity) m.c).openBookMark(view, m.getItem(position));
+                                ((BookMarkMainActivity) m.context).openBookMark(bookmark);
                             }
                         });
         }
@@ -76,7 +74,7 @@ public class MainAdapter extends ArrayAdapter<String> {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            ((MainActivity)m.c).deleteDialog(m.getItem(position));
+                            ((BookMarkMainActivity)m.context).deleteDialog(bookmark);
                         }
                     });
         }

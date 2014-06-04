@@ -9,36 +9,41 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class BookMarkEditingActivity extends Activity {
-    String currentName;
-    String currentURI;
+
     public final static String BOOK_MARK_MESSAGE_OLD = "com.danielalabi.bookmark.BOOK_MARK_MESSAGE_OLD";
     public final static String BOOK_MARK_MESSAGE_NEW = "com.danielalabi.bookmark.BOOK_MARK_MESSAGE_NEW";
+
+    // keep track of the current BookMark being edited
+    BookMark currentBookMark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        currentBookMark = new BookMark();
+
         // Get the message from the intent
         Intent intent = getIntent();
-        String[] current = intent.getStringExtra(MainActivity.BOOK_MARK_MESSAGE).split("\\|");
-        currentName = current[0];
+        String[] kv = intent.getStringExtra(BookMarkMainActivity.BOOK_MARK_MESSAGE).split("\\|");
 
+        // edit name and URI text
         setContentView(R.layout.activity_book_mark_editing);
         EditText t1 = (EditText) findViewById(R.id.editTextName);
         EditText t2 = (EditText) findViewById(R.id.editTextURI);
-        t1.setText(currentName);
-        if (current.length == 2) {
-            currentURI = current[1];
-            t2.setText(currentURI);
+        currentBookMark.setName(kv[0]);
+        t1.setText(kv[0]);
+
+        if (kv.length == 2) {
+            currentBookMark.setURI(kv[1]);
+            t2.setText(kv[1]);
         }
     }
 
 
-    /** Called when the user clicks the Send button */
+    /** Called when the user clicks the Save button */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void saveBookMark(View view) {
         EditText e1 = (EditText) findViewById(R.id.editTextName);
@@ -49,15 +54,14 @@ public class BookMarkEditingActivity extends Activity {
 
         if (newName.length() == 0 || newURI.length() == 0) {
             Toast.makeText(getApplicationContext(),
-                    "BookMark name or URI cannot be empty.",
-                    Toast.LENGTH_SHORT).show();
+                            "BookMark name or URI cannot be empty.",
+                            Toast.LENGTH_SHORT).show();
         } else {
             Intent intent = getParentActivityIntent();
-            intent.putExtra(BOOK_MARK_MESSAGE_OLD, currentName + "|" + currentURI);
-            if (!newURI.startsWith("http://") || newURI.startsWith("https://")) {
-                newURI = "http://" + newURI;
-            }
-            intent.putExtra(BOOK_MARK_MESSAGE_NEW, newName + "|" + newURI);
+
+            intent.putExtra(BOOK_MARK_MESSAGE_OLD, currentBookMark.serializeBookMark());
+            intent.putExtra(BOOK_MARK_MESSAGE_NEW, (new BookMark(newName, newURI)).toString());
+
             navigateUpTo(intent);
         }
     }

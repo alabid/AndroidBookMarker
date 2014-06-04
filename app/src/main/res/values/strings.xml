@@ -18,19 +18,13 @@
 
     <string name="app_name">BookMarker</string>
     <string name="create_new">Create New</string>
-    <string name="dummy_title">Dummy title</string>
-    <string name="dummy_subtitle">Dummy subtitle</string>
     <string name="delete_content_description">Delete</string>
-    <string name="touched_primary_message">Touched primary list item target.</string>
-    <string name="touched_secondary_message">Touched secondary list item target (delete).</string>
-    <string name="docs_link_title">Design docs: borderless buttons</string>
     <string name="title_activity_book_mark_editing">BookMarkEditingActivity</string>
-    <string name="hello_world">Hello world!</string>
     <string name="edit">Edit</string>
-    <string name="dialog_fire_missiles">Fire Missiles?</string>
+    <string name="done">Done</string>
     <string name="cancel">Cancel</string>
     <string name="fire">Fire</string>
-
+    <string name="no_bookmarks_yet">No BookMarks created yet!</string>
     <string name="link_text_auto">http://github.com/alabid</string>
 
 </resources>
